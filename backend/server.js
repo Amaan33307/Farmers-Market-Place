@@ -73,9 +73,24 @@ app.use(async (req, res, next) => {
 
         console.error("❌ MongoDB Connection Failed:", error.message);
 
+        // Safe hint for the site owner (never shows passwords)
+        const text = String(error.message || "");
+
+        let hint = "Please try again in a moment.";
+
+        if (/MONGO_URI is missing/.test(text)) {
+            hint = "Setup: the MONGO_URI environment variable is missing.";
+        } else if (/auth|authentication|bad auth/i.test(text)) {
+            hint = "Setup: MongoDB rejected the username/password in MONGO_URI.";
+        } else if (/whitelist|IP|ENOTFOUND|querySrv|timed out|Server selection/i.test(text)) {
+            hint = "Setup: MongoDB Atlas is not accepting connections from this server. In Atlas, open Network Access and allow 0.0.0.0/0.";
+        } else if (/Invalid scheme|URI|parse/i.test(text)) {
+            hint = "Setup: MONGO_URI is not a valid MongoDB connection string.";
+        }
+
         res
             .status(503)
-            .send("The database is not reachable right now. Please try again in a moment.");
+            .send("The database is not reachable right now. " + hint);
 
     }
 
