@@ -6,12 +6,80 @@ require("dotenv").config();
 
 const { APP_NAME } = require("./config/constants");
 const { renderError } = require("./utils/helpers");
+const MongoSessionStore = require("./utils/mongoSessionStore");
 const Notification = require("./models/Notification");
 const aiAssistant = require("./services/aiAssistant");
 
 const app = express();
 
 app.disable("x-powered-by");
+
+// Behind Vercel / Render proxies (needed for secure cookies)
+app.set("trust proxy", 1);
+
+
+// =====================================================
+// MONGODB CONNECTION
+// Connects once and reuses the connection. On Vercel
+// each request may start a new function instance, so
+// every request first makes sure the database is ready.
+// =====================================================
+
+let connectionPromise = null;
+
+function connectDB() {
+
+    if (mongoose.connection.readyState === 1) {
+        return Promise.resolve();
+    }
+
+    if (!connectionPromise) {
+
+        if (!process.env.MONGO_URI) {
+            return Promise.reject(
+                new Error("MONGO_URI is missing. Add it to the .env file (or Vercel environment variables).")
+            );
+        }
+
+        connectionPromise =
+            mongoose
+                .connect(process.env.MONGO_URI, {
+                    serverSelectionTimeoutMS: 10000
+                })
+                .then(() => {
+                    console.log("✅ MongoDB Connected");
+                })
+                .catch((error) => {
+                    connectionPromise = null;
+                    throw error;
+                });
+
+    }
+
+    return connectionPromise;
+
+}
+
+
+app.use(async (req, res, next) => {
+
+    try {
+
+        await connectDB();
+
+        next();
+
+    } catch (error) {
+
+        console.error("❌ MongoDB Connection Failed:", error.message);
+
+        res
+            .status(503)
+            .send("The database is not reachable right now. Please try again in a moment.");
+
+    }
+
+});
 
 
 // =====================================================
@@ -57,6 +125,10 @@ app.use(
             process.env.SESSION_SECRET ||
             "farmer-marketplace-dev-secret",
 
+        // Sessions are saved in MongoDB, so logins survive
+        // server restarts and work on Vercel (serverless)
+        store: new MongoSessionStore(),
+
         resave: false,
 
         saveUninitialized: false,
@@ -64,7 +136,9 @@ app.use(
         cookie: {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
-            sameSite: "lax"
+            sameSite: "lax",
+            // HTTPS-only cookie when deployed
+            secure: process.env.NODE_ENV === "production" ? "auto" : false
         }
     })
 );
@@ -264,78 +338,45 @@ app.use(
 
 
 // =====================================================
-// MONGODB + START SERVER
+// START SERVER
+// Locally:  npm run dev  -> connects to MongoDB, then listens.
+// Vercel:   api/index.js imports this app (no app.listen).
 // =====================================================
 
 const PORT =
     process.env.PORT || 5000;
 
 
-if (!process.env.MONGO_URI) {
+if (require.main === module) {
 
-    console.log(
-        "❌ MONGO_URI is missing. Add it to the .env file in the project folder."
-    );
+    connectDB()
 
-    process.exit(1);
+        .then(() => {
+
+            app.listen(
+                PORT,
+                () => {
+
+                    console.log(
+                        `✅ ${APP_NAME} running on http://localhost:${PORT}`
+                    );
+
+                }
+            );
+
+        })
+
+        .catch((error) => {
+
+            console.log("❌ MongoDB Connection Failed");
+
+            console.log(error.message);
+
+            process.exit(1);
+
+        });
 
 }
 
 
-mongoose
-    .connect(
-        process.env.MONGO_URI,
-        {
-            serverSelectionTimeoutMS: 10000
-        }
-    )
-
-    .then(() => {
-
-        console.log(
-            "================================="
-        );
-
-        console.log(
-            "✅ MongoDB Connected"
-        );
-
-        console.log(
-            "================================="
-        );
-
-
-        app.listen(
-            PORT,
-            () => {
-
-                console.log(
-                    `✅ ${APP_NAME} running on http://localhost:${PORT}`
-                );
-
-            }
-        );
-
-    })
-
-    .catch(
-        (error) => {
-
-            console.log(
-                "================================="
-            );
-
-            console.log(
-                "❌ MongoDB Connection Failed"
-            );
-
-            console.log(
-                "================================="
-            );
-
-            console.log(
-                error.message
-            );
-
-        }
-    );
+module.exports = app;

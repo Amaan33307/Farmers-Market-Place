@@ -29,6 +29,16 @@ npm start
 
 Open http://localhost:5000
 
+## Deploy (Vercel)
+
+The project is ready for Vercel (`vercel.json` + `api/index.js`).
+
+1. Import the GitHub repository at https://vercel.com/new (no build settings needed).
+2. Add environment variables: `MONGO_URI`, `SESSION_SECRET`, and optionally `GEMINI_API_KEY`.
+3. In MongoDB Atlas → **Network Access**, allow `0.0.0.0/0` (Vercel uses changing IP addresses).
+
+Login sessions are stored in MongoDB (`sessions` collection), so users stay logged in on serverless hosting.
+
 ## Features
 
 **Public:** Home, Marketplace (search, category and location filters), product details, Farmers (real farmers with search), About, Contact (messages are saved to MongoDB).
@@ -54,7 +64,11 @@ backend/
   routes/                    page, auth, product, order, notification, payment, ai, farmer API
   services/                  priceInsight (KNN), recommendations, aiAssistant (Gemini / Claude)
   utils/helpers.js           flash messages, error page, safe regex
-  server.js
+  utils/mongoSessionStore.js login sessions saved in MongoDB
+  server.js                  Express app (exported for Vercel)
+api/index.js                 Vercel entry point
+vercel.json                  Vercel configuration
+scripts/add-missing-images.js  one-time data fix (npm run fix-images)
 frontend/src/
   components/header.ejs, footer.ejs
   pages/*.ejs
