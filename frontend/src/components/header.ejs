@@ -452,6 +452,44 @@
         }
 
 
+        /* Keep icons and labels on one line */
+        .navbar-nav .nav-link,
+        .auth-buttons .btn,
+        .user-menu .dropdown-toggle {
+
+            white-space: nowrap;
+
+        }
+
+
+        /* Laptop widths: tighten spacing so the logged-in menu fits */
+        @media (min-width: 992px) and (max-width: 1399px) {
+
+            .navbar-nav .nav-link {
+
+                padding: 9px 9px !important;
+
+            }
+
+            .auth-buttons .btn {
+
+                padding: 8px 12px;
+
+            }
+
+            .user-menu .dropdown-toggle {
+
+                max-width: 190px;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+
+            }
+
+        }
+
+
         @media (max-width: 991px) {
 
             .navbar-nav {
