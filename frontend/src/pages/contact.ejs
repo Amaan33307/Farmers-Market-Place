@@ -1,0 +1,413 @@
+<%- include('../components/header') %>
+
+
+<!-- ==========================================
+     CONTACT HERO
+========================================== -->
+
+<section class="py-5 bg-light">
+
+    <div class="container py-4">
+
+        <div class="text-center">
+
+            <span class="badge bg-success px-3 py-2 mb-3">
+                Get In Touch
+            </span>
+
+            <h1 class="display-5 fw-bold mb-3">
+                Contact Us
+            </h1>
+
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Have a question, suggestion, or need assistance?
+                We would love to hear from you.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     CONTACT SECTION
+========================================== -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="row g-5">
+
+
+            <!-- ==================================
+                 CONTACT INFORMATION
+            =================================== -->
+
+            <div class="col-lg-5">
+
+                <span class="text-success fw-semibold">
+                    CONTACT INFORMATION
+                </span>
+
+                <h2 class="fw-bold mt-2 mb-3">
+                    Let's Connect
+                </h2>
+
+                <p class="text-muted mb-4">
+                    Whether you are a farmer looking to sell your
+                    products or a buyer looking for agricultural
+                    products, our team is here to help.
+                </p>
+
+
+                <!-- EMAIL -->
+
+                <div class="d-flex mb-4">
+
+                    <div
+                        class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:50px;height:50px;font-size:22px;"
+                    >
+                        ✉️
+                    </div>
+
+                    <div class="ms-3">
+
+                        <h6 class="fw-bold mb-1">
+                            Email
+                        </h6>
+
+                        <p class="text-muted mb-0">
+                            support@aifarmer.com
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="d-flex mb-4">
+
+                    <div
+                        class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:50px;height:50px;font-size:22px;"
+                    >
+                        📞
+                    </div>
+
+                    <div class="ms-3">
+
+                        <h6 class="fw-bold mb-1">
+                            Phone
+                        </h6>
+
+                        <p class="text-muted mb-0">
+                            +91 98765 43210
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="d-flex mb-4">
+
+                    <div
+                        class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:50px;height:50px;font-size:22px;"
+                    >
+                        📍
+                    </div>
+
+                    <div class="ms-3">
+
+                        <h6 class="fw-bold mb-1">
+                            Location
+                        </h6>
+
+                        <p class="text-muted mb-0">
+                            Mumbai, Maharashtra, India
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WORKING HOURS -->
+
+                <div class="d-flex">
+
+                    <div
+                        class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:50px;height:50px;font-size:22px;"
+                    >
+                        🕐
+                    </div>
+
+                    <div class="ms-3">
+
+                        <h6 class="fw-bold mb-1">
+                            Working Hours
+                        </h6>
+
+                        <p class="text-muted mb-0">
+                            Monday – Saturday
+                        </p>
+
+                        <p class="text-muted mb-0">
+                            9:00 AM – 6:00 PM
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 CONTACT FORM
+            =================================== -->
+
+            <div class="col-lg-7">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body p-4 p-md-5">
+
+                        <h4 class="fw-bold mb-1">
+                            Send Us a Message
+                        </h4>
+
+                        <p class="text-muted mb-4">
+                            Fill in the details below and we'll get
+                            back to you.
+                        </p>
+
+
+                        <form
+                            action="/contact"
+                            method="POST"
+                        >
+
+
+                            <!-- NAME -->
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="name"
+                                    class="form-label fw-semibold"
+                                >
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Enter your full name"
+                                    value="<%= old.name || (userName || '') %>"
+                                    minlength="2"
+                                    maxlength="50"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="email"
+                                    class="form-label fw-semibold"
+                                >
+                                    Email Address
+                                </label>
+
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter your email address"
+                                    value="<%= old.email || (userEmail || '') %>"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="phone"
+                                    class="form-label fw-semibold"
+                                >
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    class="form-control"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    value="<%= old.phone || '' %>"
+                                    pattern="[6-9][0-9]{9}"
+                                    maxlength="10"
+                                >
+
+                            </div>
+
+
+                            <!-- SUBJECT -->
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="subject"
+                                    class="form-label fw-semibold"
+                                >
+                                    Subject
+                                </label>
+
+                                <select
+                                    class="form-select"
+                                    id="subject"
+                                    name="subject"
+                                    required
+                                >
+
+                                    <option value="" disabled <%= old.subject ? "" : "selected" %>>
+                                        Select a subject
+                                    </option>
+
+                                    <option value="general" <%= old.subject === "general" ? "selected" : "" %>>
+                                        General Enquiry
+                                    </option>
+
+                                    <option value="farmer" <%= old.subject === "farmer" ? "selected" : "" %>>
+                                        Farmer Support
+                                    </option>
+
+                                    <option value="buyer" <%= old.subject === "buyer" ? "selected" : "" %>>
+                                        Buyer Support
+                                    </option>
+
+                                    <option value="technical" <%= old.subject === "technical" ? "selected" : "" %>>
+                                        Technical Support
+                                    </option>
+
+                                    <option value="feedback" <%= old.subject === "feedback" ? "selected" : "" %>>
+                                        Feedback / Suggestion
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- MESSAGE -->
+
+                            <div class="mb-4">
+
+                                <label
+                                    for="message"
+                                    class="form-label fw-semibold"
+                                >
+                                    Message
+                                </label>
+
+                                <textarea
+                                    class="form-control"
+                                    id="message"
+                                    name="message"
+                                    rows="5"
+                                    placeholder="Write your message here..."
+                                    minlength="10"
+                                    maxlength="1000"
+                                    required
+                                ><%= old.message || '' %></textarea>
+
+                            </div>
+
+
+                            <!-- SUBMIT -->
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100 py-2 fw-semibold"
+                            >
+                                Send Message
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FAQ / SUPPORT CTA
+========================================== -->
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+        <div class="text-center">
+
+            <div class="fs-1 mb-3">
+                🌱
+            </div>
+
+            <h3 class="fw-bold">
+                We're Here to Help
+            </h3>
+
+            <p class="text-muted mb-4">
+                Your feedback helps us improve the Farmer Marketplace.
+            </p>
+
+            <a
+                href="/marketplace"
+                class="btn btn-outline-success px-4"
+            >
+                Visit Marketplace
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<%- include('../components/footer') %>

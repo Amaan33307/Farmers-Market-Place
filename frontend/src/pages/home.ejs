@@ -1,0 +1,1018 @@
+<%- include('../components/header') %>
+
+<!-- ================================
+     HOME PAGE
+================================ -->
+
+<style>
+    /* ================================
+       GENERAL
+    ================================= */
+
+    .home-page {
+        font-family: 'Poppins', sans-serif;
+        color: #222;
+        background: #ffffff;
+    }
+
+    /* ================================
+       HERO SECTION
+    ================================= */
+
+    .hero-section {
+        min-height: 650px;
+        display: flex;
+        align-items: center;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(15, 55, 28, 0.96) 0%,
+                rgba(15, 55, 28, 0.88) 45%,
+                rgba(15, 55, 28, 0.25) 100%
+            ),
+            url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=2000&q=85');
+
+        background-size: cover;
+        background-position: center;
+
+        position: relative;
+    }
+
+    .hero-content {
+        max-width: 680px;
+        color: white;
+    }
+
+    .hero-tag {
+        display: inline-block;
+
+        padding: 7px 15px;
+
+        border: 1px solid rgba(255,255,255,0.4);
+        border-radius: 30px;
+
+        font-size: 13px;
+        font-weight: 500;
+
+        margin-bottom: 20px;
+
+        background: rgba(255,255,255,0.08);
+    }
+
+    .hero-title {
+        font-size: 55px;
+        line-height: 1.15;
+        font-weight: 700;
+
+        margin-bottom: 22px;
+    }
+
+    .hero-title span {
+        color: #a7d98c;
+    }
+
+    .hero-description {
+        font-size: 17px;
+        line-height: 1.8;
+
+        color: rgba(255,255,255,0.9);
+
+        max-width: 600px;
+
+        margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .hero-primary-btn {
+        background: #ffffff;
+        color: #1f4d2e;
+
+        padding: 13px 25px;
+
+        border-radius: 7px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        text-decoration: none;
+
+        transition: 0.3s ease;
+    }
+
+    .hero-primary-btn:hover {
+        background: #a7d98c;
+        color: #173b23;
+    }
+
+    .hero-secondary-btn {
+        border: 1px solid rgba(255,255,255,0.7);
+
+        color: white;
+
+        padding: 13px 25px;
+
+        border-radius: 7px;
+
+        font-size: 14px;
+        font-weight: 500;
+
+        text-decoration: none;
+
+        transition: 0.3s ease;
+    }
+
+    .hero-secondary-btn:hover {
+        background: white;
+        color: #1f4d2e;
+    }
+
+    /* ================================
+       STATS
+    ================================= */
+
+    .stats-section {
+        background: #ffffff;
+
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+        position: relative;
+
+        margin-top: -50px;
+
+        z-index: 5;
+
+        border-radius: 10px;
+    }
+
+    .stat-box {
+        padding: 28px 20px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 27px;
+        font-weight: 700;
+        color: #1f4d2e;
+    }
+
+    .stat-title {
+        font-size: 13px;
+        color: #777;
+        margin-top: 4px;
+    }
+
+    /* ================================
+       SECTION COMMON
+    ================================= */
+
+    .section {
+        padding: 90px 0;
+    }
+
+    .section-label {
+        color: #1f4d2e;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        letter-spacing: 2px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-size: 36px;
+        font-weight: 700;
+
+        color: #222;
+
+        margin-bottom: 15px;
+    }
+
+    .section-description {
+        color: #6c757d;
+
+        font-size: 15px;
+
+        line-height: 1.8;
+
+        max-width: 650px;
+    }
+
+    /* ================================
+       FEATURES
+    ================================= */
+
+    .feature-card {
+        background: white;
+
+        border: 1px solid #e8eee8;
+
+        border-radius: 10px;
+
+        padding: 30px;
+
+        height: 100%;
+
+        transition: 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+        border-color: #c9dfc7;
+    }
+
+    .feature-icon {
+        width: 55px;
+        height: 55px;
+
+        background: #edf6eb;
+
+        color: #1f4d2e;
+
+        border-radius: 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 24px;
+
+        margin-bottom: 20px;
+    }
+
+    .feature-title {
+        font-size: 18px;
+        font-weight: 600;
+
+        margin-bottom: 10px;
+    }
+
+    .feature-text {
+        color: #6c757d;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+        margin: 0;
+    }
+
+    /* ================================
+       HOW IT WORKS
+    ================================= */
+
+    .process-section {
+        background: #f7faf6;
+    }
+
+    .process-card {
+        text-align: center;
+
+        padding: 25px;
+    }
+
+    .process-number {
+        width: 45px;
+        height: 45px;
+
+        margin: 0 auto 20px;
+
+        border-radius: 50%;
+
+        background: #1f4d2e;
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 600;
+    }
+
+    .process-title {
+        font-size: 17px;
+        font-weight: 600;
+
+        margin-bottom: 10px;
+    }
+
+    .process-text {
+        color: #777;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+    }
+
+    /* ================================
+       MARKETPLACE CTA
+    ================================= */
+
+    .cta-section {
+        padding: 80px 0;
+    }
+
+    .cta-box {
+        background:
+            linear-gradient(
+                120deg,
+                #1f4d2e,
+                #2d673d
+            );
+
+        border-radius: 12px;
+
+        padding: 55px;
+
+        color: white;
+
+        position: relative;
+
+        overflow: hidden;
+    }
+
+    .cta-box::after {
+        content: '';
+
+        position: absolute;
+
+        width: 250px;
+        height: 250px;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,0.06);
+
+        right: -80px;
+        top: -80px;
+    }
+
+    .cta-title {
+        font-size: 32px;
+
+        font-weight: 700;
+
+        margin-bottom: 12px;
+    }
+
+    .cta-text {
+        color: rgba(255,255,255,0.8);
+
+        font-size: 14px;
+
+        max-width: 600px;
+
+        line-height: 1.8;
+
+        margin-bottom: 25px;
+    }
+
+    .cta-btn {
+        display: inline-block;
+
+        background: white;
+
+        color: #1f4d2e;
+
+        padding: 12px 23px;
+
+        border-radius: 7px;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 600;
+    }
+
+    .cta-btn:hover {
+        background: #a7d98c;
+
+        color: #173b23;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
+    @media (max-width: 991px) {
+
+        .hero-section {
+            min-height: 580px;
+        }
+
+        .hero-title {
+            font-size: 44px;
+        }
+
+        .stats-section {
+            margin-top: -30px;
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        .hero-section {
+            min-height: 620px;
+
+            background-position: center;
+        }
+
+        .hero-title {
+            font-size: 37px;
+        }
+
+        .hero-description {
+            font-size: 15px;
+        }
+
+        .section {
+            padding: 65px 0;
+        }
+
+        .section-title {
+            font-size: 29px;
+        }
+
+        .stats-section {
+            margin-top: 0;
+            border-radius: 0;
+        }
+
+        .stat-box {
+            padding: 20px 10px;
+        }
+
+        .cta-box {
+            padding: 35px 25px;
+        }
+
+        .cta-title {
+            font-size: 27px;
+        }
+    }
+    /* ================================
+       LATEST PRODUCTS
+    ================================= */
+
+    .latest-section {
+        padding: 70px 0 10px;
+    }
+
+    .latest-card {
+        display: block;
+        background: #ffffff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.06);
+        text-decoration: none;
+        transition: 0.25s ease;
+        height: 100%;
+    }
+
+    .latest-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .latest-image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+    }
+
+    .latest-no-image {
+        background: #e8eee9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+    }
+</style>
+
+
+<div class="home-page">
+
+    <!-- ================================
+         HERO
+    ================================= -->
+
+    <section class="hero-section">
+
+        <div class="container">
+
+            <div class="hero-content">
+
+                <div class="hero-tag">
+                    <i class="bi bi-stars me-1"></i>
+                    Smart Agriculture Marketplace
+                </div>
+
+                <h1 class="hero-title">
+                    Connecting Farmers
+                    <span>With Better Markets.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Farmer Marketplace brings farmers and buyers together
+                    through a simple, transparent and technology-driven
+                    agricultural marketplace.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="/marketplace" class="hero-primary-btn">
+                        <i class="bi bi-shop me-2"></i>
+                        Explore Marketplace
+                    </a>
+
+                    <% if (userId) { %>
+
+                        <a href="/dashboard" class="hero-secondary-btn">
+                            <i class="bi bi-speedometer2 me-2"></i>
+                            Go to Dashboard
+                        </a>
+
+                    <% } else { %>
+
+                        <a href="/register" class="hero-secondary-btn">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Join Marketplace
+                        </a>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         STATS
+    ================================= -->
+
+    <div class="container">
+
+        <section class="stats-section">
+
+            <div class="row g-0">
+
+                <div class="col-6 col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-number">
+                            <%= stats.farmerCount %>
+                        </div>
+
+                        <div class="stat-title">
+                            Farmers
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-6 col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-number">
+                            <%= stats.productCount %>
+                        </div>
+
+                        <div class="stat-title">
+                            Products Available
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-6 col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-number">
+                            <%= stats.buyerCount %>
+                        </div>
+
+                        <div class="stat-title">
+                            Buyers
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-6 col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-number">
+                            <%= stats.acceptedCount %>
+                        </div>
+
+                        <div class="stat-title">
+                            Accepted Requests
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ================================
+         LATEST PRODUCTS (from MongoDB)
+    ================================= -->
+
+    <% if (latestProducts.length > 0) { %>
+
+        <section class="latest-section">
+
+            <div class="container">
+
+                <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+
+                    <div>
+
+                        <span class="text-success fw-semibold small">
+                            FRESH IN THE MARKETPLACE
+                        </span>
+
+                        <h2 class="section-title mb-0">
+                            Latest Products
+                        </h2>
+
+                    </div>
+
+                    <a href="/marketplace" class="btn btn-outline-success">
+                        View All Products
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    <% latestProducts.forEach(product => { %>
+
+                        <div class="col-6 col-lg-3">
+
+                            <a href="/products/<%= product._id %>" class="latest-card">
+
+                                <% if (product.image) { %>
+
+                                    <img
+                                        src="<%= product.image %>"
+                                        alt="<%= product.name %>"
+                                        class="latest-image"
+                                        loading="lazy"
+                                    >
+
+                                <% } else { %>
+
+                                    <div class="latest-image latest-no-image">
+                                        🌾
+                                    </div>
+
+                                <% } %>
+
+                                <div class="p-3">
+
+                                    <span class="badge bg-success-subtle text-success mb-2">
+                                        <%= product.category %>
+                                    </span>
+
+                                    <div class="fw-bold text-dark">
+                                        <%= product.name %>
+                                    </div>
+
+                                    <div class="text-success fw-bold">
+                                        ₹<%= product.price %>
+                                        <span class="text-muted small fw-normal">/ <%= product.unit %></span>
+                                    </div>
+
+                                    <div class="text-muted small">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <%= product.location %>
+                                    </div>
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    <% }) %>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    <% } %>
+
+
+    <!-- ================================
+         WHY FARMER MARKETPLACE
+    ================================= -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <div class="section-label">
+                    Why Choose Us
+                </div>
+
+                <h2 class="section-title">
+                    A Smarter Way to Trade Agriculture
+                </h2>
+
+                <p class="section-description mx-auto">
+                    Our platform is designed to make agricultural trading
+                    easier, more transparent and accessible for both farmers
+                    and buyers.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- FEATURE 1 -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                        <h3 class="feature-title">
+                            Direct Connection
+                        </h3>
+
+                        <p class="feature-text">
+                            Connect farmers directly with buyers and reduce
+                            unnecessary intermediaries.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEATURE 2 -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+
+                        <h3 class="feature-title">
+                            Better Opportunities
+                        </h3>
+
+                        <p class="feature-text">
+                            Give farmers access to more buyers and help them
+                            discover better selling opportunities.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEATURE 3 -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+
+                        <h3 class="feature-title">
+                            AI Powered
+                        </h3>
+
+                        <p class="feature-text">
+                            AI price insights help farmers set fair prices,
+                            and smart recommendations help buyers find products.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEATURE 4 -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+
+                        <h3 class="feature-title">
+                            Transparent
+                        </h3>
+
+                        <p class="feature-text">
+                            Keep product information, pricing and marketplace
+                            interactions clear and accessible.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         HOW IT WORKS
+    ================================= -->
+
+    <section class="section process-section">
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <div class="section-label">
+                    Simple Process
+                </div>
+
+                <h2 class="section-title">
+                    How Farmer Marketplace Works
+                </h2>
+
+                <p class="section-description mx-auto">
+                    Getting started is simple. Join the marketplace and
+                    connect with the agricultural community.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            01
+                        </div>
+
+                        <h3 class="process-title">
+                            Create Account
+                        </h3>
+
+                        <p class="process-text">
+                            Register as a farmer or buyer and create your
+                            marketplace profile.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            02
+                        </div>
+
+                        <h3 class="process-title">
+                            List or Explore
+                        </h3>
+
+                        <p class="process-text">
+                            Farmers can list agricultural products while
+                            buyers can explore available products.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            03
+                        </div>
+
+                        <h3 class="process-title">
+                            Connect
+                        </h3>
+
+                        <p class="process-text">
+                            Find suitable products and connect with the
+                            relevant farmer or buyer.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            04
+                        </div>
+
+                        <h3 class="process-title">
+                            Trade
+                        </h3>
+
+                        <p class="process-text">
+                            Complete your agricultural transaction through
+                            the marketplace.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         CTA
+    ================================= -->
+
+    <section class="cta-section">
+
+        <div class="container">
+
+            <div class="cta-box">
+
+                <h2 class="cta-title">
+                    Ready to Join the Marketplace?
+                </h2>
+
+                <p class="cta-text">
+                    Whether you're a farmer looking for buyers or a buyer
+                    looking for quality agricultural products, Farmer
+                    Marketplace gives you a place to connect.
+                </p>
+
+                <a href="/register" class="cta-btn">
+                    Create Your Account
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ================================
+     FOOTER
+================================ -->
+
+<%- include('../components/footer') %>

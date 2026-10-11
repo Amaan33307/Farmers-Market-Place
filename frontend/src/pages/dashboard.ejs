@@ -1,0 +1,747 @@
+<%- include("../components/header") %>
+
+
+<style>
+
+.dashboard-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 55px 0;
+}
+
+.dashboard-label {
+    color: #28703d;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.stat-card {
+    background: white;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #e7f4ea;
+    color: #28703d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.dashboard-action {
+    background: white;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.05);
+}
+
+.order-card {
+    background: white;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+}
+
+</style>
+
+
+<section class="dashboard-page">
+
+    <div class="container">
+
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+
+            <div>
+
+                <div class="dashboard-label">
+
+                    <% if (role === "farmer") { %>
+
+                        FARMER DASHBOARD
+
+                    <% } else { %>
+
+                        BUYER DASHBOARD
+
+                    <% } %>
+
+                </div>
+
+
+                <h1 class="fw-bold mt-2 mb-1">
+
+                    Welcome,
+                    <%= userName || "User" %>
+
+                </h1>
+
+
+                <p class="text-muted mb-0">
+
+                    <% if (role === "farmer") { %>
+
+                        You have <strong><%= productStats.total %></strong>
+                        product<%= productStats.total === 1 ? "" : "s" %> listed
+                        <% if (pendingOrders > 0) { %>
+                            and <strong><%= pendingOrders %></strong> request<%= pendingOrders === 1 ? "" : "s" %> waiting for you.
+                        <% } else { %>
+                            and no pending requests.
+                        <% } %>
+
+                    <% } else { %>
+
+                        Discover fresh products and track your requests.
+
+                    <% } %>
+
+                </p>
+
+            </div>
+
+
+            <% if (role === "farmer") { %>
+
+                <a
+                    href="/products/add"
+                    class="btn btn-success px-4"
+                >
+
+                    <i class="bi bi-plus-lg me-2"></i>
+
+                    Add Product
+
+                </a>
+
+            <% } else { %>
+
+                <a
+                    href="/marketplace"
+                    class="btn btn-success px-4"
+                >
+
+                    <i class="bi bi-shop me-2"></i>
+
+                    Browse Marketplace
+
+                </a>
+
+            <% } %>
+
+        </div>
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <div class="row g-4 mb-5">
+
+
+            <!-- TOTAL -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card stat-card h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="stat-icon mb-3">
+
+                            <i class="bi bi-clipboard-data"></i>
+
+                        </div>
+
+
+                        <div class="text-muted small">
+                            Total Requests
+                        </div>
+
+
+                        <div class="stat-number mt-1">
+
+                            <%= totalOrders %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDING -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card stat-card h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="stat-icon mb-3">
+
+                            <i class="bi bi-hourglass-split"></i>
+
+                        </div>
+
+
+                        <div class="text-muted small">
+                            Pending
+                        </div>
+
+
+                        <div class="stat-number mt-1">
+
+                            <%= pendingOrders %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCEPTED -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card stat-card h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="stat-icon mb-3">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+
+                        <div class="text-muted small">
+                            Accepted
+                        </div>
+
+
+                        <div class="stat-number mt-1">
+
+                            <%= acceptedOrders %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- COMPLETED -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card stat-card h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="stat-icon mb-3">
+
+                            <i class="bi bi-x-circle"></i>
+
+                        </div>
+
+
+                        <div class="text-muted small">
+                            Rejected
+                        </div>
+
+
+                        <div class="stat-number mt-1">
+
+                            <%= rejectedOrders %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="card dashboard-action h-100">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="fw-bold mb-4">
+                            Quick Actions
+                        </h5>
+
+
+                        <% if (role === "farmer") { %>
+
+
+                            <a
+                                href="/products/add"
+                                class="btn btn-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-plus-circle me-2"></i>
+
+                                Add New Product
+
+                            </a>
+
+
+                            <a
+                                href="/products/my-products"
+                                class="btn btn-outline-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-box-seam me-2"></i>
+
+                                My Products
+
+                            </a>
+
+
+                            <a
+                                href="/orders/farmer-requests"
+                                class="btn btn-outline-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-clipboard-check me-2"></i>
+
+                                Product Requests
+
+                                <% if (pendingOrders > 0) { %>
+                                    <span class="badge text-bg-warning ms-1"><%= pendingOrders %></span>
+                                <% } %>
+
+                            </a>
+
+
+                            <a
+                                href="/marketplace"
+                                class="btn btn-outline-success w-100"
+                            >
+
+                                <i class="bi bi-shop me-2"></i>
+
+                                Marketplace
+
+                            </a>
+
+
+                            <% if (productStats.outOfStock > 0 || productStats.lowStock.length > 0) { %>
+
+                                <div class="alert alert-warning small mt-4 mb-0">
+
+                                    <div class="fw-semibold mb-1">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>
+                                        Stock alerts
+                                    </div>
+
+                                    <% if (productStats.outOfStock > 0) { %>
+                                        <div><%= productStats.outOfStock %> product<%= productStats.outOfStock === 1 ? " is" : "s are" %> out of stock.</div>
+                                    <% } %>
+
+                                    <% productStats.lowStock.forEach(p => { %>
+                                        <div>Low: <%= p.name %> (<%= p.quantity %> <%= p.unit %>)</div>
+                                    <% }) %>
+
+                                </div>
+
+                            <% } %>
+
+
+                        <% } else { %>
+
+
+                            <a
+                                href="/marketplace"
+                                class="btn btn-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-shop me-2"></i>
+
+                                Browse Marketplace
+
+                            </a>
+
+
+                            <a
+                                href="/orders/my-requests"
+                                class="btn btn-outline-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-clipboard-check me-2"></i>
+
+                                My Requests
+
+                            </a>
+
+
+                            <a
+                                href="/farmers"
+                                class="btn btn-outline-success w-100 mb-3"
+                            >
+
+                                <i class="bi bi-people me-2"></i>
+
+                                Find Farmers
+
+                            </a>
+
+
+                            <a
+                                href="/"
+                                class="btn btn-outline-secondary w-100"
+                            >
+
+                                <i class="bi bi-house me-2"></i>
+
+                                Home
+
+                            </a>
+
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RECENT ACTIVITY
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="card dashboard-action">
+
+                    <div class="card-body p-4">
+
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <h5 class="fw-bold mb-0">
+                                Recent Activity
+                            </h5>
+
+
+                            <% if (role === "farmer") { %>
+
+                                <a
+                                    href="/orders/farmer-requests"
+                                    class="text-success text-decoration-none small fw-semibold"
+                                >
+                                    View All
+                                </a>
+
+                            <% } else { %>
+
+                                <a
+                                    href="/orders/my-requests"
+                                    class="text-success text-decoration-none small fw-semibold"
+                                >
+                                    View All
+                                </a>
+
+                            <% } %>
+
+                        </div>
+
+
+                        <% if (!orders || orders.length === 0) { %>
+
+
+                            <div class="text-center py-5">
+
+                                <div style="font-size:50px;">
+                                    📋
+                                </div>
+
+                                <h5 class="fw-bold mt-3">
+                                    No Activity Yet
+                                </h5>
+
+                                <p class="text-muted mb-3">
+                                    Your recent requests and orders will appear here.
+                                </p>
+
+                                <% if (role === "farmer") { %>
+                                    <a href="/products/add" class="btn btn-success btn-sm">Add your first product</a>
+                                <% } else { %>
+                                    <a href="/marketplace" class="btn btn-success btn-sm">Browse the marketplace</a>
+                                <% } %>
+
+                            </div>
+
+
+                        <% } else { %>
+
+
+                            <% orders.forEach(order => { %>
+
+
+                                <div class="card order-card mb-3">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex justify-content-between align-items-start gap-3">
+
+
+                                            <div>
+
+                                                <div class="fw-bold">
+
+                                                    <%= order.productName %>
+
+                                                </div>
+
+
+                                                <div class="text-muted small mt-1">
+
+                                                    <%= order.quantity %>
+                                                    <%= order.unit %>
+
+                                                    ·
+
+                                                    ₹<%= order.totalAmount %>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <% if (order.status === "pending") { %>
+
+                                                <span class="badge text-bg-warning">
+                                                    Pending
+                                                </span>
+
+                                            <% } else if (order.status === "accepted") { %>
+
+                                                <span class="badge text-bg-success">
+                                                    Accepted
+                                                </span>
+
+                                            <% } else if (order.status === "rejected") { %>
+
+                                                <span class="badge text-bg-danger">
+                                                    Rejected
+                                                </span>
+
+                                            <% } else { %>
+
+                                                <span class="badge text-bg-primary">
+                                                    Completed (Paid)
+                                                </span>
+
+                                            <% } %>
+
+
+                                        </div>
+
+
+                                        <div class="text-muted small mt-3">
+
+                                            <% if (role === "farmer") { %>
+
+                                                Buyer:
+                                                <%= order.buyerName %>
+
+                                            <% } else { %>
+
+                                                Farmer:
+                                                <%= order.farmerName %>
+
+                                            <% } %>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            <% }) %>
+
+
+                        <% } %>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             AI RECOMMENDATIONS (BUYERS)
+        ====================================================== -->
+
+        <% if (role === "buyer" && recommendations.length > 0) { %>
+
+            <div class="card dashboard-action mt-4">
+
+                <div class="card-body p-4">
+
+                    <div class="ai-label mb-1">
+                        <i class="bi bi-stars me-1"></i>
+                        SMART RECOMMENDATIONS
+                    </div>
+
+                    <h5 class="fw-bold mb-3">
+                        Recommended for You
+                    </h5>
+
+                    <div class="row g-3">
+
+                        <% recommendations.forEach(item => { %>
+
+                            <div class="col-md-6 col-lg-3">
+
+                                <a href="/products/<%= item.product._id %>" class="ai-pick border">
+
+                                    <span class="badge bg-success-subtle text-success mb-2">
+                                        <%= item.product.category %>
+                                    </span>
+
+                                    <div class="fw-bold text-dark">
+                                        <%= item.product.name %>
+                                    </div>
+
+                                    <div class="text-success fw-semibold">
+                                        ₹<%= item.product.price %> / <%= item.product.unit %>
+                                    </div>
+
+                                    <div class="small text-muted">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <%= item.product.location %>
+                                    </div>
+
+                                    <div class="small text-success mt-2">
+                                        <i class="bi bi-lightbulb"></i>
+                                        <%= item.reason %>
+                                    </div>
+
+                                </a>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <% } %>
+
+
+        <!-- =====================================================
+             TOTAL VALUE
+        ====================================================== -->
+
+        <div class="card dashboard-action mt-4">
+
+            <div class="card-body p-4">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-8">
+
+                        <div class="text-muted small">
+
+                            <% if (role === "farmer") { %>
+
+                                ACCEPTED ORDER VALUE (SALES)
+
+                            <% } else { %>
+
+                                ACCEPTED PURCHASE VALUE
+
+                            <% } %>
+
+                        </div>
+
+
+                        <h2 class="fw-bold mb-0 mt-1">
+
+                            ₹<%= totalValue.toLocaleString("en-IN") %>
+
+                        </h2>
+
+                    </div>
+
+
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                        <i
+                            class="bi bi-graph-up-arrow text-success"
+                            style="font-size:42px;"
+                        ></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

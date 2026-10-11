@@ -1,0 +1,359 @@
+<%- include('../components/header') %>
+
+
+<style>
+
+    .login-page {
+        min-height: calc(100vh - 80px);
+        background: #f5f7f4;
+        padding: 70px 0;
+    }
+
+    .login-card {
+        max-width: 1050px;
+        margin: auto;
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-left {
+        background: linear-gradient(
+            145deg,
+            #173f25,
+            #357547
+        );
+
+        color: white;
+        min-height: 560px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 50px;
+    }
+
+    .login-left-content {
+        text-align: center;
+        max-width: 360px;
+    }
+
+    .login-logo {
+        font-size: 75px;
+        margin-bottom: 20px;
+    }
+
+    .login-left h2 {
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .login-left p {
+        color: rgba(255,255,255,0.82);
+        line-height: 1.8;
+    }
+
+    .login-feature {
+        margin-top: 18px;
+        font-size: 14px;
+    }
+
+    .login-right {
+        background: white;
+        min-height: 560px;
+
+        display: flex;
+        align-items: center;
+
+        padding: 50px;
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 420px;
+        margin: auto;
+    }
+
+    .login-form small {
+        color: #6c757d;
+    }
+
+    .login-input {
+        height: 50px;
+        border-radius: 8px;
+    }
+
+    .login-input:focus {
+        border-color: #357547;
+        box-shadow: 0 0 0 0.2rem rgba(53,117,71,0.12);
+    }
+
+    .login-button {
+        height: 50px;
+        border-radius: 8px;
+        background: #28703d;
+        border: none;
+        font-weight: 600;
+    }
+
+    .login-button:hover {
+        background: #1e572f;
+    }
+
+    .login-register {
+        text-align: center;
+        margin-top: 25px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .login-register a {
+        color: #28703d;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-register a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 991px) {
+
+        .login-left {
+            min-height: 350px;
+        }
+
+        .login-right {
+            min-height: auto;
+        }
+
+    }
+
+    @media (max-width: 575px) {
+
+        .login-page {
+            padding: 30px 15px;
+        }
+
+        .login-left,
+        .login-right {
+            padding: 35px 25px;
+        }
+
+    }
+
+</style>
+
+
+<section class="login-page">
+
+    <div class="container">
+
+        <div class="card login-card">
+
+            <div class="row g-0">
+
+
+                <!-- ==================================
+                     LEFT SIDE
+                =================================== -->
+
+                <div class="col-lg-5">
+
+                    <div class="login-left">
+
+                        <div class="login-left-content">
+
+                            <div class="login-logo">
+                                🌾
+                            </div>
+
+                            <h2>
+                                Farmer Marketplace
+                            </h2>
+
+                            <p>
+                                Connect farmers and buyers through
+                                a smarter agricultural marketplace.
+                            </p>
+
+                            <div class="login-feature">
+                                ✓ Direct farmer-to-buyer connection
+                            </div>
+
+                            <div class="login-feature">
+                                ✓ Discover agricultural products
+                            </div>
+
+                            <div class="login-feature">
+                                ✓ Simple and secure platform
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     RIGHT SIDE
+                =================================== -->
+
+                <div class="col-lg-7">
+
+                    <div class="login-right">
+
+                        <div class="login-form">
+
+                            <div class="mb-4">
+
+                                <small class="text-success fw-semibold">
+                                    WELCOME BACK
+                                </small>
+
+                                <h1 class="fw-bold mt-2 mb-2">
+                                    Sign In
+                                </h1>
+
+                                <p class="text-muted">
+                                    Login to your Farmer Marketplace
+                                    account.
+                                </p>
+
+                            </div>
+
+
+                            <% if (loggedOut) { %>
+
+                                <div class="alert alert-success py-2 small">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    You have been logged out successfully.
+                                </div>
+
+                            <% } %>
+
+
+                            <!-- ==================================
+                                 LOGIN FORM
+                            =================================== -->
+
+                            <form
+                                action="/login"
+                                method="POST"
+                            >
+
+
+                                <!-- EMAIL -->
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="email"
+                                        class="form-label fw-semibold"
+                                    >
+                                        Email Address
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="form-control login-input"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        value="<%= oldEmail %>"
+                                        autocomplete="email"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- PASSWORD -->
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="password"
+                                        class="form-label fw-semibold"
+                                    >
+                                        Password
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        class="form-control login-input"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter your password"
+                                        autocomplete="current-password"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- REMEMBER -->
+
+                                <div class="form-check mb-4">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="remember"
+                                        name="remember"
+                                    >
+
+                                    <label
+                                        class="form-check-label text-muted"
+                                        for="remember"
+                                    >
+                                        Remember me
+                                    </label>
+
+                                </div>
+
+
+                                <!-- BUTTON -->
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success login-button w-100"
+                                >
+                                    Sign In
+                                </button>
+
+
+                            </form>
+
+
+                            <!-- REGISTER -->
+
+                            <div class="login-register">
+
+                                Don't have an account?
+
+                                <a href="/register">
+                                    Create an account
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<%- include('../components/footer') %>

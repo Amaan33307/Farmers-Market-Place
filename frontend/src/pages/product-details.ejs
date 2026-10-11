@@ -1,0 +1,496 @@
+<%- include("../components/header") %>
+
+<style>
+
+.details-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 60px 0;
+}
+
+.details-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+}
+
+.details-image {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    background: #e8eee9;
+}
+
+.no-image {
+    height: 480px;
+    background: #e8eee9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+}
+
+.price {
+    color: #28703d;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.info-box {
+    background: #f7faf7;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.request-box {
+    background: #f7faf7;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+</style>
+
+
+<section class="details-page">
+
+    <div class="container">
+
+        <div class="card details-card">
+
+            <div class="row g-0">
+
+
+                <!-- IMAGE -->
+
+                <div class="col-lg-6">
+
+                    <% if (product.image) { %>
+
+                        <img
+                            src="<%= product.image %>"
+                            class="details-image"
+                            alt="<%= product.name %>"
+                        >
+
+                    <% } else { %>
+
+                        <div class="no-image">
+                            🌾
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+
+                <!-- DETAILS -->
+
+                <div class="col-lg-6">
+
+                    <div class="p-4 p-md-5">
+
+                        <span class="badge bg-success-subtle text-success mb-3">
+                            <%= product.category %>
+                        </span>
+
+
+                        <h1 class="fw-bold mb-3">
+                            <%= product.name %>
+                        </h1>
+
+
+                        <div class="price mb-4">
+
+                            ₹<%= product.price %>
+
+                            <span class="text-muted fs-6">
+                                / <%= product.unit %>
+                            </span>
+
+                        </div>
+
+
+                        <!-- AI PRICE INSIGHT (KNN over similar listings) -->
+
+                        <% if (priceInsight && priceInsight.available && priceInsight.verdict) { %>
+
+                            <div class="ai-box mb-4">
+
+                                <div class="ai-label mb-1">
+                                    <i class="bi bi-stars me-1"></i>
+                                    AI PRICE INSIGHT
+                                </div>
+
+                                <div class="fw-semibold">
+                                    <%= priceInsight.verdict.text %>
+                                </div>
+
+                                <div class="small text-muted">
+                                    Estimated fair price:
+                                    ₹<%= priceInsight.predictedPrice %> / <%= priceInsight.unit %>
+                                    (range ₹<%= priceInsight.range.min %> – ₹<%= priceInsight.range.max %>),
+                                    based on <%= priceInsight.basedOn %> similar product<%= priceInsight.basedOn === 1 ? "" : "s" %>
+                                    · <%= priceInsight.confidence %> confidence
+                                </div>
+
+                            </div>
+
+                        <% } %>
+
+
+                        <h5 class="fw-bold">
+                            Product Description
+                        </h5>
+
+                        <p class="text-muted mb-4">
+                            <%= product.description %>
+                        </p>
+
+
+                        <div class="row g-3 mb-4">
+
+                            <div class="col-6">
+
+                                <div class="info-box">
+
+                                    <small class="text-muted">
+                                        Available
+                                    </small>
+
+                                    <div class="fw-bold">
+                                        <%= product.quantity %>
+                                        <%= product.unit %>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-6">
+
+                                <div class="info-box">
+
+                                    <small class="text-muted">
+                                        Location
+                                    </small>
+
+                                    <div class="fw-bold">
+                                        <%= product.location %>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-box mb-4">
+
+                            <small class="text-muted">
+                                Farmer
+                            </small>
+
+                            <div class="fw-bold">
+
+                                <i class="bi bi-person-circle me-2"></i>
+
+                                <%= product.farmerName %>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- AVAILABILITY -->
+
+                        <div class="mb-4">
+
+                            <% if (product.quantity > 0) { %>
+
+                                <span class="badge text-bg-success px-3 py-2">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Available
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="badge text-bg-secondary px-3 py-2">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Out of stock
+                                </span>
+
+                            <% } %>
+
+                            <span class="text-muted small ms-2">
+                                Listed on
+                                <%= new Date(product.createdAt).toLocaleDateString("en-IN") %>
+                            </span>
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <% if (isOwner) { %>
+
+                            <!-- FARMER OWNER: EDIT / DELETE -->
+
+                            <div class="request-box">
+
+                                <h5 class="fw-bold mb-3">
+                                    Manage Your Product
+                                </h5>
+
+                                <div class="d-flex gap-2">
+
+                                    <a
+                                        href="/products/<%= product._id %>/edit"
+                                        class="btn btn-success flex-grow-1"
+                                    >
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Edit Product
+                                    </a>
+
+                                    <form
+                                        action="/products/<%= product._id %>/delete"
+                                        method="POST"
+                                        onsubmit="return confirm('Delete this product? Pending requests for it will be closed.')"
+                                    >
+
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash me-1"></i>
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+
+                        <% } else if (role === "buyer") { %>
+
+                            <% if (pendingRequest) { %>
+
+                                <div class="alert alert-warning">
+
+                                    <i class="bi bi-hourglass-split me-1"></i>
+
+                                    You already requested
+                                    <strong><%= pendingRequest.quantity %> <%= pendingRequest.unit %></strong>
+                                    of this product. Waiting for the farmer's response.
+
+                                    <a href="/orders/my-requests" class="alert-link d-block mt-1">
+                                        View my requests
+                                    </a>
+
+                                </div>
+
+                            <% } else if (product.quantity < 1) { %>
+
+                                <div class="alert alert-secondary">
+                                    This product is currently out of stock.
+                                </div>
+
+                            <% } else { %>
+
+                                <!-- BUYER: SEND REQUEST -->
+
+                                <div class="request-box">
+
+                                    <h5 class="fw-bold mb-3">
+                                        Request This Product
+                                    </h5>
+
+                                    <form
+                                        action="/orders/request/<%= product._id %>"
+                                        method="POST"
+                                    >
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label fw-semibold" for="quantity">
+                                                Quantity (<%= product.unit %>)
+                                            </label>
+
+                                            <input
+                                                type="number"
+                                                id="quantity"
+                                                name="quantity"
+                                                class="form-control"
+                                                min="1"
+                                                step="1"
+                                                max="<%= product.quantity %>"
+                                                value="1"
+                                                required
+                                            >
+
+                                            <div class="form-text">
+                                                Estimated total:
+                                                <strong>₹<span id="estimatedTotal"><%= product.price %></span></strong>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label fw-semibold" for="message">
+                                                Message to Farmer
+                                            </label>
+
+                                            <textarea
+                                                id="message"
+                                                name="message"
+                                                class="form-control"
+                                                rows="3"
+                                                maxlength="500"
+                                                placeholder="e.g. delivery date, quality requirements..."
+                                            ></textarea>
+
+                                        </div>
+
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-success w-100"
+                                        >
+
+                                            <i class="bi bi-send me-2"></i>
+
+                                            Send Request
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                                <script>
+                                    (function () {
+                                        var qty = document.getElementById("quantity");
+                                        var total = document.getElementById("estimatedTotal");
+                                        var price = <%= Number(product.price) %>;
+                                        qty.addEventListener("input", function () {
+                                            var q = Math.max(0, parseInt(qty.value, 10) || 0);
+                                            total.textContent = (q * price).toLocaleString("en-IN");
+                                        });
+                                    })();
+                                </script>
+
+                            <% } %>
+
+
+                        <% } else if (!userId) { %>
+
+                            <!-- NOT LOGGED IN -->
+
+                            <a
+                                href="/login"
+                                class="btn btn-success w-100"
+                            >
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Login to Request Product
+                            </a>
+
+                            <p class="text-muted small text-center mt-2 mb-0">
+                                New here? <a href="/register?role=buyer" class="text-success">Create a buyer account</a>
+                            </p>
+
+
+                        <% } else { %>
+
+                            <!-- ANOTHER FARMER -->
+
+                            <div class="alert alert-info">
+
+                                You are logged in as a farmer.
+                                Only buyers can send product requests.
+
+                            </div>
+
+                        <% } %>
+
+
+                        <a
+                            href="/marketplace"
+                            class="btn btn-outline-success w-100 mt-3"
+                        >
+
+                            <i class="bi bi-arrow-left me-2"></i>
+
+                            Back to Marketplace
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIMILAR PRODUCTS (AI similarity) -->
+
+        <% if (similarProducts.length > 0) { %>
+
+            <div class="mt-5">
+
+                <div class="ai-label mb-1">
+                    <i class="bi bi-stars me-1"></i>
+                    RECOMMENDED
+                </div>
+
+                <h4 class="fw-bold mb-3">
+                    Similar Products
+                </h4>
+
+                <div class="row g-3">
+
+                    <% similarProducts.forEach(item => { %>
+
+                        <div class="col-md-4">
+
+                            <a href="/products/<%= item._id %>" class="ai-pick">
+
+                                <span class="badge bg-success-subtle text-success mb-2">
+                                    <%= item.category %>
+                                </span>
+
+                                <div class="fw-bold text-dark">
+                                    <%= item.name %>
+                                </div>
+
+                                <div class="text-success fw-semibold">
+                                    ₹<%= item.price %> / <%= item.unit %>
+                                </div>
+
+                                <div class="small text-muted">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <%= item.location %> · <%= item.farmerName %>
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    <% }) %>
+
+                </div>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

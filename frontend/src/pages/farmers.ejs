@@ -1,0 +1,501 @@
+<%- include('../components/header') %>
+
+
+<!-- ==========================================
+     FARMERS HERO
+========================================== -->
+
+<section class="py-5 bg-light">
+
+    <div class="container py-4">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <span class="badge bg-success px-3 py-2 mb-3">
+                    🌾 Our Farming Community
+                </span>
+
+                <h1 class="display-5 fw-bold mb-3">
+                    Meet Our
+                    <span class="text-success">
+                        Farmers
+                    </span>
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    Connect with trusted farmers and discover
+                    quality agricultural products grown with care.
+                </p>
+
+                <div class="d-flex gap-3 flex-wrap">
+
+                    <a
+                        href="/marketplace"
+                        class="btn btn-success px-4 py-2"
+                    >
+                        Browse Products
+                    </a>
+
+                    <% if (!userId) { %>
+
+                        <a
+                            href="/register?role=farmer"
+                            class="btn btn-outline-success px-4 py-2"
+                        >
+                            Join as Farmer
+                        </a>
+
+                    <% } else if (role === "farmer") { %>
+
+                        <a
+                            href="/products/add"
+                            class="btn btn-outline-success px-4 py-2"
+                        >
+                            Add Your Product
+                        </a>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+
+                <div
+                    style="font-size: 110px;"
+                >
+                    👨‍🌾
+                </div>
+
+                <h5 class="fw-semibold mt-2">
+                    Supporting Local Farmers
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FARMER STATISTICS (live from MongoDB)
+========================================== -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="row g-4 text-center">
+
+            <% [
+                { icon: "👨‍🌾", value: stats.farmerCount, label: "Registered Farmers" },
+                { icon: "🌾", value: stats.productCount, label: "Products Listed" },
+                { icon: "📍", value: stats.locationCount, label: "Locations" },
+                { icon: "🤝", value: stats.acceptedCount, label: "Accepted Requests" }
+            ].forEach(item => { %>
+
+                <div class="col-6 col-lg-3">
+
+                    <div class="p-4 border rounded-3 h-100 bg-white">
+
+                        <div class="fs-1 text-success">
+                            <%= item.icon %>
+                        </div>
+
+                        <h3 class="fw-bold mb-1">
+                            <%= item.value %>
+                        </h3>
+
+                        <p class="text-muted mb-0">
+                            <%= item.label %>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     SEARCH FARMERS
+========================================== -->
+
+<section class="py-4 bg-light border-top border-bottom">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <form action="/farmers" method="GET">
+
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input
+                            type="text"
+                            name="q"
+                            class="form-control"
+                            value="<%= q %>"
+                            placeholder="Search farmers by name or location..."
+                        >
+
+                        <button type="submit" class="btn btn-success px-4">
+                            Search
+                        </button>
+
+                        <% if (q) { %>
+
+                            <a href="/farmers" class="btn btn-outline-secondary">
+                                Clear
+                            </a>
+
+                        <% } %>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     FARMER CARDS
+========================================== -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold">
+                <%= q ? "Search Results" : "Our Farmers" %>
+            </h2>
+
+            <p class="text-muted">
+                <% if (q) { %>
+                    <%= farmers.length %> farmer<%= farmers.length === 1 ? "" : "s" %> found for "<%= q %>"
+                <% } else { %>
+                    Farmers selling directly on Farmer Marketplace.
+                <% } %>
+            </p>
+
+        </div>
+
+
+        <% if (farmers.length === 0) { %>
+
+            <div class="card border-0 shadow-sm text-center p-5">
+
+                <div style="font-size:60px;">
+                    👨‍🌾
+                </div>
+
+                <h4 class="fw-bold mt-3">
+                    No Farmers Found
+                </h4>
+
+                <p class="text-muted mb-0">
+                    <%= q ? "Try a different name or location." : "No farmers have registered yet." %>
+                </p>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="row g-4">
+
+                <% farmers.forEach(farmer => { %>
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card border-0 shadow-sm h-100">
+
+                            <div class="card-body p-4 text-center">
+
+                                <div
+                                    class="rounded-circle bg-success-subtle text-success fw-bold mx-auto mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:90px;height:90px;font-size:34px;"
+                                >
+                                    <%= farmer.name.charAt(0).toUpperCase() %>
+                                </div>
+
+                                <h5 class="fw-bold">
+                                    <%= farmer.name %>
+                                </h5>
+
+                                <p class="text-success mb-2">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <%= farmer.locations.length ? farmer.locations.slice(0, 2).join(", ") : "Location not listed yet" %>
+                                </p>
+
+                                <div class="mb-2">
+
+                                    <% farmer.categories.forEach(cat => { %>
+
+                                        <span class="badge bg-light text-dark border me-1 mb-1">
+                                            <%= cat %>
+                                        </span>
+
+                                    <% }) %>
+
+                                </div>
+
+                                <div class="border-top pt-3 mt-3">
+
+                                    <div class="row text-center">
+
+                                        <div class="col-6">
+
+                                            <strong class="d-block">
+                                                <%= farmer.productCount %>
+                                            </strong>
+
+                                            <small class="text-muted">
+                                                Products
+                                            </small>
+
+                                        </div>
+
+                                        <div class="col-6">
+
+                                            <strong class="d-block">
+                                                <%= farmer.inStock %>
+                                            </strong>
+
+                                            <small class="text-muted">
+                                                In Stock
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="small text-muted mt-3">
+                                    Member since
+                                    <%= new Date(farmer.joined).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) %>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer bg-white border-0 p-3">
+
+                                <% if (farmer.productCount > 0) { %>
+
+                                    <a
+                                        href="/products/marketplace?farmer=<%= farmer.id %>"
+                                        class="btn btn-outline-success w-100"
+                                    >
+                                        View Products
+                                    </a>
+
+                                <% } else { %>
+
+                                    <button class="btn btn-outline-secondary w-100" disabled>
+                                        No products yet
+                                    </button>
+
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     WHY FARMERS JOIN
+========================================== -->
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold">
+                Why Farmers Choose Us
+            </h2>
+
+            <p class="text-muted">
+                We help farmers reach more customers and grow their business.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="text-center p-3">
+
+                    <div class="fs-1 mb-3">
+                        💰
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Better Prices
+                    </h5>
+
+                    <p class="text-muted small">
+                        Connect directly with buyers and reduce
+                        unnecessary middlemen.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="text-center p-3">
+
+                    <div class="fs-1 mb-3">
+                        👥
+                    </div>
+
+                    <h5 class="fw-bold">
+                        More Customers
+                    </h5>
+
+                    <p class="text-muted small">
+                        Reach buyers looking for fresh agricultural
+                        products.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="text-center p-3">
+
+                    <div class="fs-1 mb-3">
+                        📱
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Easy Management
+                    </h5>
+
+                    <p class="text-muted small">
+                        Manage products and marketplace listings
+                        from one place.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="text-center p-3">
+
+                    <div class="fs-1 mb-3">
+                        🤝
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Direct Connection
+                    </h5>
+
+                    <p class="text-muted small">
+                        Build trusted relationships with buyers
+                        directly.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     CTA (only for visitors who are not logged in)
+========================================== -->
+
+<% if (!userId) { %>
+
+    <section class="py-5 bg-success text-white">
+
+        <div class="container text-center py-3">
+
+            <h2 class="fw-bold mb-3">
+                Ready to Join Our Farming Community?
+            </h2>
+
+            <p class="mb-4">
+                Create your farmer account and start selling
+                your agricultural products.
+            </p>
+
+            <a
+                href="/register?role=farmer"
+                class="btn btn-light px-4 py-2 fw-semibold"
+            >
+                Register as Farmer
+            </a>
+
+        </div>
+
+    </section>
+
+<% } %>
+
+
+
+<%- include('../components/footer') %>

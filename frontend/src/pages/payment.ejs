@@ -1,0 +1,280 @@
+<%- include("../components/header") %>
+
+<style>
+
+.payment-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 60px 0;
+}
+
+.payment-card {
+    max-width: 950px;
+    margin: auto;
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+}
+
+.payment-summary {
+    background: #173f25;
+    color: white;
+    padding: 45px;
+}
+
+.payment-form {
+    background: white;
+    padding: 45px;
+}
+
+.payment-method {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.payment-method:hover {
+    border-color: #28703d;
+    background: #f7faf7;
+}
+
+.payment-method input {
+    margin-right: 10px;
+}
+
+.pay-button {
+    background: #28703d;
+    border: none;
+    padding: 13px;
+    font-weight: 600;
+    border-radius: 9px;
+}
+
+</style>
+
+
+<section class="payment-page">
+
+    <div class="container">
+
+        <div class="card payment-card">
+
+            <div class="row g-0">
+
+
+                <!-- SUMMARY -->
+
+                <div class="col-lg-5">
+
+                    <div class="payment-summary">
+
+                        <div style="font-size:55px;">
+                            💳
+                        </div>
+
+                        <span class="text-white-50">
+                            DEMO CHECKOUT
+                        </span>
+
+                        <h2 class="fw-bold mt-2">
+                            Complete Your Payment
+                        </h2>
+
+                        <p class="text-white-50">
+                            Your request has been accepted by the farmer.
+                        </p>
+
+
+                        <hr class="border-light opacity-25">
+
+
+                        <small class="text-white-50">
+                            Product
+                        </small>
+
+                        <h5 class="fw-bold">
+                            <%= order.productName %>
+                        </h5>
+
+
+                        <div class="mt-4">
+
+                            <small class="text-white-50">
+                                Quantity
+                            </small>
+
+                            <div class="fw-semibold">
+                                <%= order.quantity %>
+                                <%= order.unit %>
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4">
+
+                            <small class="text-white-50">
+                                Farmer
+                            </small>
+
+                            <div class="fw-semibold">
+                                <%= order.farmerName %>
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4">
+
+                            <small class="text-white-50">
+                                Total Amount
+                            </small>
+
+                            <div class="fs-2 fw-bold">
+                                ₹<%= order.totalAmount %>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAYMENT -->
+
+                <div class="col-lg-7">
+
+                    <div class="payment-form">
+
+                        <span class="text-success fw-semibold">
+                            PAYMENT METHOD
+                        </span>
+
+                        <h2 class="fw-bold mt-2 mb-3">
+                            Choose Payment
+                        </h2>
+
+                        <div class="alert alert-info small mb-4">
+                            <i class="bi bi-info-circle me-1"></i>
+                            This is a demo payment for the project.
+                            No real money is charged.
+                        </div>
+
+
+                        <form
+                            action="/payment/<%= order._id %>/pay"
+                            method="POST"
+                        >
+
+
+                            <!-- UPI -->
+
+                            <label class="payment-method d-block mb-3">
+
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="upi"
+                                    required
+                                >
+
+                                <strong>
+                                    <i class="bi bi-phone me-2"></i>
+                                    UPI
+                                </strong>
+
+                                <div class="text-muted small ms-4">
+                                    Pay using UPI
+                                </div>
+
+                            </label>
+
+
+                            <!-- CARD -->
+
+                            <label class="payment-method d-block mb-3">
+
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="card"
+                                >
+
+                                <strong>
+                                    <i class="bi bi-credit-card me-2"></i>
+                                    Credit / Debit Card
+                                </strong>
+
+                                <div class="text-muted small ms-4">
+                                    Pay securely using your card
+                                </div>
+
+                            </label>
+
+
+                            <!-- COD -->
+
+                            <label class="payment-method d-block mb-4">
+
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="cod"
+                                >
+
+                                <strong>
+                                    <i class="bi bi-box-seam me-2"></i>
+                                    Cash on Delivery
+                                </strong>
+
+                                <div class="text-muted small ms-4">
+                                    Pay when the product is delivered
+                                </div>
+
+                            </label>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-success pay-button w-100"
+                            >
+
+                                <i class="bi bi-lock-fill me-2"></i>
+
+                                Pay ₹<%= order.totalAmount %>
+
+                            </button>
+
+
+                        </form>
+
+
+                        <div class="text-center mt-4">
+
+                            <a
+                                href="/orders/my-requests"
+                                class="text-success text-decoration-none"
+                            >
+                                ← Back to My Requests
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

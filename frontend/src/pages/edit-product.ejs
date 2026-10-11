@@ -1,0 +1,307 @@
+<%- include("../components/header") %>
+
+<style>
+
+.edit-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 60px 0;
+}
+
+.edit-card {
+    max-width: 850px;
+    margin: auto;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+}
+
+.form-control,
+.form-select {
+    min-height: 48px;
+    border-radius: 8px;
+}
+
+</style>
+
+
+<%
+    // If the last save failed, show what the farmer typed;
+    // otherwise show the saved product values.
+    const form = old || product;
+%>
+
+<section class="edit-page">
+
+    <div class="container">
+
+        <div class="card edit-card">
+
+            <div class="card-body p-4 p-md-5">
+
+                <span class="text-success fw-semibold">
+                    PRODUCT MANAGEMENT
+                </span>
+
+                <h1 class="fw-bold mt-2">
+                    Edit Product
+                </h1>
+
+                <p class="text-muted mb-4">
+                    Update your product information. Set quantity to 0
+                    to mark it as out of stock.
+                </p>
+
+
+                <form
+                    action="/products/<%= product._id %>/edit"
+                    method="POST"
+                >
+
+                    <div class="row g-4">
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Product Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="<%= form.name %>"
+                                maxlength="100"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Category
+                            </label>
+
+                            <select
+                                name="category"
+                                class="form-select"
+                                required
+                            >
+
+                                <% categories.forEach(category => { %>
+
+                                    <option
+                                        value="<%= category %>"
+                                        <%= form.category === category ? "selected" : "" %>
+                                    >
+                                        <%= category %>
+                                    </option>
+
+                                <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Price
+                            </label>
+
+                            <input
+                                type="number"
+                                name="price"
+                                class="form-control"
+                                value="<%= form.price %>"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                class="form-control"
+                                value="<%= form.quantity %>"
+                                min="0"
+                                step="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Unit
+                            </label>
+
+                            <select
+                                name="unit"
+                                class="form-select"
+                                required
+                            >
+
+                                <% units.forEach(unit => { %>
+
+                                    <option
+                                        value="<%= unit %>"
+                                        <%= form.unit === unit ? "selected" : "" %>
+                                    >
+                                        <%= unit %>
+                                    </option>
+
+                                <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Location
+                            </label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                class="form-control"
+                                value="<%= form.location %>"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- AI PRICE INSIGHT -->
+
+                        <div class="col-12">
+
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                                <button
+                                    type="button"
+                                    id="aiPriceBtn"
+                                    class="btn btn-outline-success btn-sm"
+                                    data-exclude="<%= product._id %>"
+                                >
+                                    <i class="bi bi-stars me-1"></i>
+                                    Get AI Price Insight
+                                </button>
+
+                                <span class="small text-muted">
+                                    Compares your product with similar listings in the marketplace.
+                                </span>
+
+                            </div>
+
+                            <div id="aiPriceResult" class="mt-2"></div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold">
+                                Image URL
+                            </label>
+
+                            <input
+                                type="url"
+                                name="image"
+                                class="form-control"
+                                value="<%= form.image || '' %>"
+                                placeholder="https://example.com/image.jpg"
+                            >
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+
+                                <label class="form-label fw-semibold mb-0">
+                                    Description
+                                </label>
+
+                                <% if (aiEnabled) { %>
+
+                                    <button
+                                        type="button"
+                                        id="aiDescBtn"
+                                        class="btn btn-outline-success btn-sm"
+                                        title="Type a few notes (optional), then let AI write the description"
+                                    >
+                                        <i class="bi bi-magic me-1"></i>
+                                        Write with AI
+                                    </button>
+
+                                <% } %>
+
+                            </div>
+
+                            <textarea
+                                name="description"
+                                class="form-control"
+                                rows="5"
+                                maxlength="1000"
+                                required
+                            ><%= form.description %></textarea>
+
+                            <div id="aiDescStatus" class="small text-muted"></div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="d-flex gap-3 mt-5">
+
+                        <a
+                            href="/products/<%= product._id %>"
+                            class="btn btn-outline-secondary px-4"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-success px-5"
+                        >
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

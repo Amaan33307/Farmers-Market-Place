@@ -1,0 +1,162 @@
+<%- include("../components/header") %>
+
+<style>
+
+.success-page {
+    min-height: calc(100vh - 80px);
+    background: #f5f7f4;
+    display: flex;
+    align-items: center;
+    padding: 60px 0;
+}
+
+.success-card {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    text-align: center;
+    padding: 55px;
+}
+
+.success-icon {
+    width: 90px;
+    height: 90px;
+    margin: auto;
+    border-radius: 50%;
+    background: #dff3e5;
+    color: #28703d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 45px;
+}
+
+.amount {
+    color: #28703d;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+</style>
+
+
+<section class="success-page">
+
+    <div class="container">
+
+        <div class="success-card">
+
+
+            <div class="success-icon">
+
+                <i class="bi bi-check-lg"></i>
+
+            </div>
+
+
+            <span class="text-success fw-semibold d-block mt-4">
+                PAYMENT SUCCESSFUL
+            </span>
+
+
+            <h1 class="fw-bold mt-2">
+                Order Confirmed!
+            </h1>
+
+
+            <p class="text-muted">
+                Your payment has been successfully processed
+                and your order is now confirmed.
+            </p>
+
+
+            <div class="amount my-4">
+
+                ₹<%= order.totalAmount %>
+
+            </div>
+
+
+            <div class="bg-light rounded p-4 text-start mb-4">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-muted">
+                        Product
+                    </span>
+
+                    <strong>
+                        <%= order.productName %>
+                    </strong>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-muted">
+                        Quantity
+                    </span>
+
+                    <strong>
+                        <%= order.quantity %>
+                        <%= order.unit %>
+                    </strong>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-muted">
+                        Farmer
+                    </span>
+
+                    <strong>
+                        <%= order.farmerName %>
+                    </strong>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+
+                    <span class="text-muted">
+                        Payment ID
+                    </span>
+
+                    <strong>
+                        <%= order.paymentId %>
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="/orders/my-requests"
+                class="btn btn-success px-5"
+            >
+                View My Orders
+            </a>
+
+
+            <a
+                href="/marketplace"
+                class="btn btn-outline-success px-5 ms-2"
+            >
+                Marketplace
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

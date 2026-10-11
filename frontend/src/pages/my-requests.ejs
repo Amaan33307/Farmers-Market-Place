@@ -1,0 +1,275 @@
+<%- include("../components/header") %>
+
+<style>
+
+.requests-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 55px 0;
+}
+
+.request-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 7px 25px rgba(0,0,0,0.06);
+}
+
+</style>
+
+
+<section class="requests-page">
+
+    <div class="container">
+
+        <div class="mb-5">
+
+            <span class="text-success fw-semibold">
+                BUYER DASHBOARD
+            </span>
+
+            <h1 class="fw-bold mt-2 mb-1">
+                My Requests
+            </h1>
+
+            <p class="text-muted">
+                Track your product requests and orders.
+            </p>
+
+        </div>
+
+
+        <% if (!orders || orders.length === 0) { %>
+
+            <div class="card border-0 shadow-sm text-center p-5">
+
+                <div style="font-size:60px;">
+                    📋
+                </div>
+
+                <h3 class="fw-bold mt-3">
+                    No Requests Yet
+                </h3>
+
+                <p class="text-muted">
+                    Browse the marketplace and request products.
+                </p>
+
+                <a
+                    href="/marketplace"
+                    class="btn btn-success"
+                >
+                    Browse Marketplace
+                </a>
+
+            </div>
+
+        <% } else { %>
+
+
+            <div class="row g-4">
+
+                <% orders.forEach(order => { %>
+
+                    <div class="col-lg-6">
+
+                        <div class="card request-card">
+
+                            <div class="card-body p-4">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <div>
+
+                                        <span class="badge bg-success-subtle text-success">
+                                            <%= order.productName %>
+                                        </span>
+
+                                        <h5 class="fw-bold mt-3">
+                                            <%= order.quantity %>
+                                            <%= order.unit %>
+                                        </h5>
+
+                                    </div>
+
+
+                                    <% if (order.status === "pending") { %>
+
+                                        <span class="badge text-bg-warning">
+                                            Pending
+                                        </span>
+
+                                    <% } else if (order.status === "accepted") { %>
+
+                                        <span class="badge text-bg-success">
+                                            Accepted
+                                        </span>
+
+                                    <% } else if (order.status === "rejected") { %>
+
+                                        <span class="badge text-bg-danger">
+                                            Rejected
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="badge text-bg-primary">
+                                            Completed
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
+
+                                <div class="small text-muted mt-2">
+                                    Requested on
+                                    <%= new Date(order.createdAt).toLocaleDateString("en-IN") %>
+                                </div>
+
+
+                                <hr>
+
+
+                                <div class="row g-3">
+
+                                    <div class="col-6">
+
+                                        <small class="text-muted">
+                                            Farmer
+                                        </small>
+
+                                        <div class="fw-semibold">
+                                            <%= order.farmerName %>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <small class="text-muted">
+                                            Price
+                                        </small>
+
+                                        <div class="fw-semibold text-success">
+                                            ₹<%= order.price %> /
+                                            <%= order.unit %>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-12">
+
+                                        <small class="text-muted">
+                                            Total Amount
+                                        </small>
+
+                                        <div class="fs-4 fw-bold">
+                                            ₹<%= order.totalAmount %>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <% if (["accepted", "completed"].includes(order.status) && order.farmer && order.farmer.phone) { %>
+
+                                    <div class="bg-success-subtle rounded p-3 mt-3 small">
+
+                                        <i class="bi bi-telephone me-1"></i>
+
+                                        Contact <strong><%= order.farmerName %></strong>:
+
+                                        <a href="tel:<%= order.farmer.phone %>" class="text-success fw-semibold">
+                                            <%= order.farmer.phone %>
+                                        </a>
+
+                                    </div>
+
+                                <% } %>
+
+
+                                <% if (order.status === "accepted" && order.paymentStatus !== "paid") { %>
+
+                                    <div class="alert alert-success mt-4 mb-3">
+
+                                        <strong>
+                                            Your request was accepted!
+                                        </strong>
+
+                                        <div class="small">
+                                            Complete the (demo) payment to confirm your order.
+                                        </div>
+
+                                    </div>
+
+
+                                    <a
+                                        href="/payment/<%= order._id %>"
+                                        class="btn btn-success w-100"
+                                    >
+
+                                        <i class="bi bi-credit-card me-2"></i>
+
+                                        Pay Now — ₹<%= order.totalAmount %>
+
+                                    </a>
+
+
+                                <% } else if (order.paymentStatus === "paid") { %>
+
+                                    <div class="alert alert-success mt-4">
+
+                                        <i class="bi bi-check-circle me-2"></i>
+
+                                        <strong>
+                                            Payment Completed
+                                        </strong>
+
+                                        <div class="small mt-1">
+                                            Payment ID:
+                                            <%= order.paymentId %>
+                                        </div>
+
+                                    </div>
+
+                                <% } %>
+
+
+                                <% if (order.message) { %>
+
+                                    <div class="bg-light rounded p-3 mt-3">
+
+                                        <small class="text-muted">
+                                            Your Message
+                                        </small>
+
+                                        <div>
+                                            <%= order.message %>
+                                        </div>
+
+                                    </div>
+
+                                <% } %>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

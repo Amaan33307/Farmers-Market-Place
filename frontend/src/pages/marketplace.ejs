@@ -1,0 +1,423 @@
+<%- include("../components/header") %>
+
+<style>
+
+.marketplace-page {
+    background: #f5f7f4;
+    min-height: calc(100vh - 80px);
+    padding: 50px 0;
+}
+
+.search-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+
+.product-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 7px 25px rgba(0,0,0,0.06);
+    height: 100%;
+    transition: 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+}
+
+.product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.no-image {
+    height: 220px;
+    background: #e8eee9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+}
+
+.product-card {
+    position: relative;
+}
+
+.out-of-stock .product-image,
+.out-of-stock .no-image {
+    opacity: 0.5;
+}
+
+.stock-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+}
+
+.price {
+    color: #28703d;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+</style>
+
+
+<section class="marketplace-page">
+
+    <div class="container">
+
+
+        <div class="mb-5">
+
+            <span class="text-success fw-semibold">
+                FARMER MARKETPLACE
+            </span>
+
+            <h1 class="fw-bold mt-2 mb-2">
+                Fresh Products Directly From Farmers
+            </h1>
+
+            <p class="text-muted">
+                Discover agricultural products from local farmers.
+            </p>
+
+        </div>
+
+
+        <!-- AI SHOPPING ASSISTANT (only when an API key is configured) -->
+
+        <% if (aiEnabled && userId) { %>
+
+            <div class="card search-card mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="ai-label mb-1">
+                        <i class="bi bi-stars me-1"></i>
+                        AI SHOPPING ASSISTANT
+                    </div>
+
+                    <p class="text-muted small mb-3">
+                        Describe what you need in your own words and AI will pick matching products.
+                    </p>
+
+                    <form id="aiAssistantForm">
+
+                        <div class="input-group">
+
+                            <input
+                                type="text"
+                                name="query"
+                                class="form-control"
+                                maxlength="300"
+                                placeholder="e.g. vegetables for a small restaurant in Pune, under ₹50/kg"
+                                required
+                            >
+
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-magic me-1"></i>
+                                Ask AI
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <div id="aiAssistantResult" class="mt-3"></div>
+
+                </div>
+
+            </div>
+
+        <% } %>
+
+
+        <!-- SEARCH -->
+
+        <div class="card search-card mb-5">
+
+            <div class="card-body p-4">
+
+                <form
+                    action="/products/marketplace"
+                    method="GET"
+                >
+
+                    <% if (farmerId) { %>
+                        <input type="hidden" name="farmer" value="<%= farmerId %>">
+                    <% } %>
+
+                    <div class="row g-3">
+
+
+                        <div class="col-lg-4">
+
+                            <label class="form-label fw-semibold">
+                                Search Product
+                            </label>
+
+                            <input
+                                type="text"
+                                name="search"
+                                class="form-control"
+                                value="<%= search %>"
+                                placeholder="e.g. Tomatoes, Rice..."
+                            >
+
+                        </div>
+
+
+                        <div class="col-lg-3">
+
+                            <label class="form-label fw-semibold">
+                                Category
+                            </label>
+
+                            <select
+                                name="category"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    All Categories
+                                </option>
+
+                                <% categories.forEach(cat => { %>
+
+                                    <option
+                                        value="<%= cat %>"
+                                        <%= category === cat ? "selected" : "" %>
+                                    >
+                                        <%= cat %>
+                                    </option>
+
+                                <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-lg-3">
+
+                            <label class="form-label fw-semibold">
+                                Location
+                            </label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                class="form-control"
+                                value="<%= location %>"
+                                placeholder="e.g. Mumbai"
+                            >
+
+                        </div>
+
+
+                        <div class="col-lg-2 d-flex align-items-end">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100"
+                            >
+                                <i class="bi bi-search me-1"></i>
+                                Search
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <% if (farmerFilterName) { %>
+
+            <div class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <span>
+                    <i class="bi bi-person-circle me-1"></i>
+                    Showing products from <strong><%= farmerFilterName %></strong>
+                </span>
+
+                <a href="/products/marketplace" class="btn btn-sm btn-outline-success">
+                    Show all farmers
+                </a>
+
+            </div>
+
+        <% } %>
+
+
+        <!-- RESULTS -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h5 class="fw-semibold mb-0">
+
+                <%= products.length %>
+                product<%= products.length === 1 ? "" : "s" %>
+                found
+
+            </h5>
+
+            <a
+                href="/products/marketplace"
+                class="btn btn-outline-success btn-sm"
+            >
+                Clear Filters
+            </a>
+
+        </div>
+
+
+        <% if (products.length === 0) { %>
+
+            <div class="card border-0 shadow-sm text-center p-5">
+
+                <div style="font-size:65px;">
+                    🔎
+                </div>
+
+                <h3 class="fw-bold mt-3">
+                    No Products Found
+                </h3>
+
+                <p class="text-muted">
+                    Try changing your search or filters.
+                </p>
+
+                <a
+                    href="/products/marketplace"
+                    class="btn btn-success"
+                >
+                    View All Products
+                </a>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <div class="row g-4">
+
+                <% products.forEach(product => { %>
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <div class="card product-card <%= product.quantity < 1 ? 'out-of-stock' : '' %>">
+
+                            <% if (product.quantity < 1) { %>
+                                <span class="badge text-bg-secondary stock-badge">Out of stock</span>
+                            <% } %>
+
+
+                            <% if (product.image) { %>
+
+                                <img
+                                    src="<%= product.image %>"
+                                    class="product-image"
+                                    alt="<%= product.name %>"
+                                >
+
+                            <% } else { %>
+
+                                <div class="no-image">
+                                    🌾
+                                </div>
+
+                            <% } %>
+
+
+                            <div class="card-body p-4">
+
+                                <span class="badge bg-success-subtle text-success mb-2">
+                                    <%= product.category %>
+                                </span>
+
+                                <h5 class="fw-bold mb-2">
+                                    <%= product.name %>
+                                </h5>
+
+                                <p class="text-muted small mb-3">
+
+                                    <%= (product.description || "").length > 85
+                                        ? product.description.substring(0, 85) + "..."
+                                        : product.description
+                                    %>
+
+                                </p>
+
+
+                                <div class="price">
+
+                                    ₹<%= product.price %>
+
+                                    <span class="text-muted fs-6">
+                                        / <%= product.unit %>
+                                    </span>
+
+                                </div>
+
+
+                                <div class="small text-muted mt-2 mb-3">
+
+                                    <i class="bi bi-box-seam me-1"></i>
+
+                                    <%= product.quantity %>
+                                    <%= product.unit %>
+
+                                    <br>
+
+                                    <i class="bi bi-geo-alt me-1"></i>
+
+                                    <%= product.location %>
+
+                                    <br>
+
+                                    <i class="bi bi-person me-1"></i>
+
+                                    <%= product.farmerName %>
+
+                                </div>
+
+
+                                <a
+                                    href="/products/<%= product._id %>"
+                                    class="btn btn-success w-100"
+                                >
+                                    View Product
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+
+        <% } %>
+
+
+    </div>
+
+</section>
+
+
+<%- include("../components/footer") %>

@@ -1,0 +1,224 @@
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================ -->
+
+<footer class="site-footer">
+
+    <div class="container py-5">
+
+        <div class="row g-4">
+
+            <!-- Brand -->
+
+            <div class="col-lg-5 col-md-6">
+
+                <h4 class="text-white fw-bold mb-3">
+                    <i class="bi bi-flower1 me-2"></i>
+                    Farmer Marketplace
+                </h4>
+
+                <p class="text-light opacity-75 mb-0">
+                    Connecting farmers and buyers through a
+                    trusted, technology-driven agricultural
+                    marketplace.
+                </p>
+
+            </div>
+
+
+            <!-- Quick Links -->
+
+            <div class="col-lg-3 col-md-3">
+
+                <h6 class="text-white fw-semibold mb-3">
+                    Quick Links
+                </h6>
+
+                <ul class="list-unstyled mb-0">
+
+                    <li class="mb-2">
+                        <a href="/" class="footer-link">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="/marketplace" class="footer-link">
+                            Marketplace
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="/farmers" class="footer-link">
+                            Farmers
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="/about" class="footer-link">
+                            About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/contact" class="footer-link">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- Account -->
+
+            <div class="col-lg-4 col-md-3">
+
+                <h6 class="text-white fw-semibold mb-3">
+                    Account
+                </h6>
+
+                <ul class="list-unstyled mb-0">
+
+                    <% if (userId) { %>
+
+                        <li class="mb-2">
+                            <a href="/dashboard" class="footer-link">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <% if (role === "farmer") { %>
+
+                            <li class="mb-2">
+                                <a href="/products/my-products" class="footer-link">
+                                    My Products
+                                </a>
+                            </li>
+
+                        <% } else { %>
+
+                            <li class="mb-2">
+                                <a href="/orders/my-requests" class="footer-link">
+                                    My Requests
+                                </a>
+                            </li>
+
+                        <% } %>
+
+                        <li class="mb-2">
+                            <a href="/logout" class="footer-link">
+                                Logout
+                            </a>
+                        </li>
+
+                    <% } else { %>
+
+                        <li class="mb-2">
+                            <a href="/login" class="footer-link">
+                                Login
+                            </a>
+                        </li>
+
+                        <li class="mb-2">
+                            <a href="/register" class="footer-link">
+                                Create Account
+                            </a>
+                        </li>
+
+                        <li class="mb-2">
+                            <a href="/register?role=farmer" class="footer-link">
+                                Join as Farmer
+                            </a>
+                        </li>
+
+                    <% } %>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bottom -->
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-6">
+
+                    <p class="mb-0">
+                        © <%= new Date().getFullYear() %> Farmer Marketplace.
+                        All rights reserved.
+                    </p>
+
+                </div>
+
+                <div class="col-md-6 text-md-end mt-2 mt-md-0">
+
+                    <span>
+                        Built for smarter agriculture
+                        <i class="bi bi-flower1 ms-1"></i>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<style>
+
+    .site-footer {
+        background: #263b2a;
+        color: #ffffff;
+        margin-top: 0;
+    }
+
+    .footer-link {
+        color: rgba(255, 255, 255, 0.70);
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .footer-link:hover {
+        color: #ffffff;
+        padding-left: 3px;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 18px 0;
+        color: rgba(255, 255, 255, 0.60);
+        font-size: 13px;
+    }
+
+</style>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+<!-- AI features (price insight, description writer, assistant) -->
+<script src="/assets/js/ai.js"></script>
+
+</body>
+
+</html>

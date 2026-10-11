@@ -1,0 +1,400 @@
+<%- include('../components/header') %>
+
+
+<style>
+
+    .register-page {
+        min-height: calc(100vh - 80px);
+        background: #f5f7f4;
+        padding: 60px 0;
+    }
+
+    .register-card {
+        max-width: 850px;
+        margin: auto;
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    .register-header {
+        text-align: center;
+        padding: 35px 25px 10px;
+    }
+
+    .register-icon {
+        font-size: 55px;
+    }
+
+    .register-header h1 {
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    .register-form {
+        padding: 25px 45px 45px;
+    }
+
+    .register-input {
+        height: 48px;
+        border-radius: 8px;
+    }
+
+    .register-input:focus {
+        border-color: #357547;
+        box-shadow: 0 0 0 0.2rem rgba(53,117,71,0.12);
+    }
+
+    .role-card {
+        cursor: pointer;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: 0.2s ease;
+    }
+
+    .role-card:hover {
+        border-color: #357547;
+        background: #f5faf6;
+    }
+
+    .btn-check:checked + .role-card {
+        border-color: #28703d;
+        background: #edf7ef;
+        box-shadow: 0 0 0 2px rgba(40,112,61,0.15);
+    }
+
+    .role-icon {
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
+    .register-button {
+        height: 50px;
+        border-radius: 8px;
+        background: #28703d;
+        border: none;
+        font-weight: 600;
+    }
+
+    .register-button:hover {
+        background: #1e572f;
+    }
+
+    .register-login {
+        text-align: center;
+        margin-top: 25px;
+        color: #777;
+    }
+
+    .register-login a {
+        color: #28703d;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    @media (max-width: 575px) {
+
+        .register-page {
+            padding: 30px 15px;
+        }
+
+        .register-form {
+            padding: 20px 25px 30px;
+        }
+
+    }
+
+</style>
+
+
+<section class="register-page">
+
+    <div class="container">
+
+        <div class="card register-card">
+
+
+            <!-- HEADER -->
+
+            <div class="register-header">
+
+                <div class="register-icon">
+                    🌾
+                </div>
+
+                <h1>
+                    Create Your Account
+                </h1>
+
+                <p class="text-muted">
+                    Join the Farmer Marketplace
+                </p>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <div class="register-form">
+
+                <form
+                    action="/register"
+                    method="POST"
+                >
+
+
+                    <!-- NAME -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="name"
+                            class="form-label fw-semibold"
+                        >
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control register-input"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            value="<%= old.name || '' %>"
+                            minlength="2"
+                            maxlength="50"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="phone"
+                            class="form-label fw-semibold"
+                        >
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            class="form-control register-input"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter 10-digit phone number"
+                            value="<%= old.phone || '' %>"
+                            pattern="[6-9][0-9]{9}"
+                            maxlength="10"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="form-label fw-semibold"
+                        >
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control register-input"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            value="<%= old.email || '' %>"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="password"
+                                class="form-label fw-semibold"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                class="form-control register-input"
+                                id="password"
+                                name="password"
+                                placeholder="Create password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="confirmPassword"
+                                class="form-label fw-semibold"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                class="form-control register-input"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Confirm password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div class="mt-4 mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Register As
+                        </label>
+
+
+                        <div class="row g-3">
+
+
+                            <!-- FARMER -->
+
+                            <div class="col-md-6">
+
+                                <input
+                                    type="radio"
+                                    class="btn-check"
+                                    name="role"
+                                    id="farmer"
+                                    value="farmer"
+                                    <%= old.role === "farmer" ? "checked" : "" %>
+                                    required
+                                >
+
+                                <label
+                                    for="farmer"
+                                    class="role-card d-block"
+                                >
+
+                                    <div class="role-icon">
+                                        👨‍🌾
+                                    </div>
+
+                                    <h5 class="fw-bold">
+                                        Farmer
+                                    </h5>
+
+                                    <p class="text-muted small mb-0">
+                                        Sell agricultural products
+                                        directly to buyers.
+                                    </p>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- BUYER -->
+
+                            <div class="col-md-6">
+
+                                <input
+                                    type="radio"
+                                    class="btn-check"
+                                    name="role"
+                                    id="buyer"
+                                    value="buyer"
+                                    <%= old.role === "buyer" ? "checked" : "" %>
+                                >
+
+                                <label
+                                    for="buyer"
+                                    class="role-card d-block"
+                                >
+
+                                    <div class="role-icon">
+                                        🛒
+                                    </div>
+
+                                    <h5 class="fw-bold">
+                                        Buyer
+                                    </h5>
+
+                                    <p class="text-muted small mb-0">
+                                        Discover and purchase
+                                        agricultural products.
+                                    </p>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-success register-button w-100"
+                    >
+                        Create Account
+                    </button>
+
+
+                </form>
+
+
+                <!-- LOGIN -->
+
+                <div class="register-login">
+
+                    Already have an account?
+
+                    <a href="/login">
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<%- include('../components/footer') %>
