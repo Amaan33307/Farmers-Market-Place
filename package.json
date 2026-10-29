@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "fix-images": "node scripts/add-missing-images.js"
+    "fix-images": "node scripts/add-missing-images.js",
+    "demo-data": "node scripts/prepare-demo.js"
   },
   "keywords": [],
   "author": "",
